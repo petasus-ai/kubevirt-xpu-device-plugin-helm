@@ -1,0 +1,10 @@
+apiVersion: v1
+appVersion: "3.4.0"
+description: A Helm chart for kubevirt-xpu-device-plugin
+name: kubevirt-xpu-device-plugin
+version: 3.4.0
+sources:
+  - https://github.com/edgestack/kubevirt-xpu-device-plugin
+maintainers:
+  - name: Jian Li
+    email: pyguni@gmail.com

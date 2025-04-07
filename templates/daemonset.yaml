@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
+  namespace: {{ .Values.vendorName }}
+  labels:
+    app: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
+    spec:
+      priorityClassName: system-node-critical
+      serviceAccountName: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
+      containers:
+        - name: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "kubevirt-xpu-device-plugin" ]
+          args:
+            - "--vendor_name={{ .Values.vendorName }}"
+            - "--vendor_id={{ .Values.vendorId }}"
+            - "--vendor_domain={{ .Values.vendorDomain }}"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: device-plugin
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: vfio
+              mountPath: /dev/vfio
+      volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+        - name: vfio
+          hostPath:
+            path: /dev/vfio
+      resources:
+        limits:
+          memory: 200Mi
+        requests:
+          cpu: 100m
+          memory: 200Mi
