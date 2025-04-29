@@ -26,9 +26,7 @@ spec:
             - "--vendor_id={{ .Values.vendorId }}"
             - "--vendor_domain={{ .Values.vendorDomain }}"
           securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
+            privileged: true
           volumeMounts:
             - name: device-plugin
               mountPath: /var/lib/kubelet/device-plugins
