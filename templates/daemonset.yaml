@@ -35,7 +35,7 @@ spec:
         - name: VENDOR_ID
           value: "0x{{ .Values.vendorId }}"
         - name: DEVICE_IDS
-          value: "{{ join \",\" .Values.deviceIds }}"
+          value: '{{ join "," .Values.deviceIds }}'
         - name: VENDOR_DOMAIN
           value: "{{ .Values.vendorDomain }}"
         image: quay.io/edgestack/kubevirt-xpu-validator:latest
