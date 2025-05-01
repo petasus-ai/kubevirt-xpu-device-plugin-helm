@@ -3,20 +3,6 @@ kind: ClusterRole
 metadata:
   name: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
 rules:
-- apiGroups:
-  - config.openshift.io
-  resources:
-  - clusterversions
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - ""
-  resources:
-  - nodes
-  - pods
-  verbs:
-  - get
-  - list
-  - patch
-  - watch
+  - apiGroups: [""]        # core API group
+    resources: ["nodes"]   # cluster-scoped resource
+    verbs: ["get", "list"]

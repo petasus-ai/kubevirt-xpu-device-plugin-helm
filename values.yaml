@@ -1,5 +1,7 @@
+image: "quay.io/edgestack/kubevirt-xpu-device-plugin:latest"
+imagePullPolicy: IfNotPresent
 vendorName: amd
 vendorId: "1002"
 vendorDomain: "amd.com"
-image: "quay.io/edgestack/kubevirt-xpu-device-plugin:latest"
-imagePullPolicy: IfNotPresent
+deviceIds:
+  - "0x74b5"

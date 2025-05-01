@@ -16,6 +16,50 @@ spec:
     spec:
       priorityClassName: system-node-critical
       serviceAccountName: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
+      initContainers:
+      - args:
+        - kubevirt-xpu-validator
+        command:
+        - sh
+        - -c
+        env:
+        - name: COMPONENT
+          value: vfio-pci
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        - name: DEFAULT_XPU_WORKLOAD_CONFIG
+          value: vm-passthrough
+        - name: VENDOR_ID
+          value: "0x{{ .Values.vendorId }}"
+        - name: DEVICE_IDS
+          value: "{{ join \",\" .Values.deviceIds }}"
+        - name: VENDOR_DOMAIN
+          value: "{{ .Values.vendorDomain }}"
+        image: quay.io/edgestack/kubevirt-xpu-validator:latest
+        imagePullPolicy: IfNotPresent
+        name: vfio-pci-validation
+        resources: {}
+        securityContext:
+          privileged: true
+          seLinuxOptions:
+            level: s0
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /host
+          mountPropagation: HostToContainer
+          name: host-root
+          readOnly: true
+        - mountPath: /sys
+          mountPropagation: HostToContainer
+          name: host-sys
+          readOnly: true
+        - mountPath: /run/xpu/validations
+          mountPropagation: Bidirectional
+          name: run-xpu-validations
       containers:
         - name: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
           image: {{ .Values.image }}
@@ -39,6 +83,18 @@ spec:
         - name: vfio
           hostPath:
             path: /dev/vfio
+        - name: run-xpu-validations
+          hostPath:
+            path: /run/xpu/validations
+            type: DirectoryOrCreate
+        - name: host-root
+          hostPath:
+            path: /
+            type: ""
+        - name: host-sys
+          hostPath:
+            path: /sys
+            type: Directory
       resources:
         limits:
           memory: 200Mi
