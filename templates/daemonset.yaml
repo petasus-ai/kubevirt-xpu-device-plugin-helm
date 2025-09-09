@@ -33,7 +33,9 @@ spec:
         - name: DEFAULT_XPU_WORKLOAD_CONFIG
           value: vm-passthrough
         - name: VENDOR_ID
-          value: "0x{{ .Values.vendorId }}"
+          value: "{{ .Values.vendorId }}"
+        - name: DEVICE_CLASS
+          value: "{{ .Values.deviceClass }}"
         - name: DEVICE_IDS
           value: '{{ join "," .Values.deviceIds }}'
         - name: VENDOR_DOMAIN
