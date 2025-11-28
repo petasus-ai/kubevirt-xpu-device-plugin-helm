@@ -40,8 +40,8 @@ spec:
           value: '{{ join "," .Values.deviceIds }}'
         - name: VENDOR_DOMAIN
           value: "{{ .Values.vendorDomain }}"
-        image: quay.io/edgestack/kubevirt-xpu-validator:latest
-        imagePullPolicy: IfNotPresent
+        image: {{ .Values.validator.image }}
+        imagePullPolicy: {{ .Values.validator.imagePullPolicy }}
         name: vfio-pci-validation
         resources: {}
         securityContext:
@@ -64,8 +64,8 @@ spec:
           name: run-xpu-validations
       containers:
         - name: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
-          image: {{ .Values.image }}
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          image: {{ .Values.plugin.image }}
+          imagePullPolicy: {{ .Values.plugin.imagePullPolicy }}
           command: [ "kubevirt-xpu-device-plugin" ]
           args:
             - "--vendor_name={{ .Values.vendorName }}"

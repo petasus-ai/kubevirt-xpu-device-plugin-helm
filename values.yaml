@@ -1,5 +1,9 @@
-image: "quay.io/edgestack/kubevirt-xpu-device-plugin:latest"
-imagePullPolicy: IfNotPresent
+plugin:
+  image: "quay.io/edgestack/kubevirt-xpu-device-plugin:latest"
+  imagePullPolicy: IfNotPresent
+validator:
+  image: "quay.io/edgestack/kubevirt-xpu-validator:latest"
+  imagePullPolicy: IfNotPresent
 vendorName: amd
 vendorId: "0x1002"
 vendorDomain: "amd.com"
