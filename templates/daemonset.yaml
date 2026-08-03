@@ -16,6 +16,18 @@ spec:
     spec:
       priorityClassName: system-node-critical
       serviceAccountName: {{ .Values.vendorName }}-kubevirt-xpu-device-plugin
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       initContainers:
       - args:
         - kubevirt-xpu-validator

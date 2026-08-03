@@ -10,3 +10,10 @@ vendorDomain: "amd.com"
 deviceClass: "0x120000"
 deviceIds:
   - "0x74b5"
+
+# Scheduling. The plugin exits with a runtime deadlock on a node that carries no
+# matching device, so confine the DaemonSet to the nodes that do — e.g. with the
+# NFD label for the PCI class/vendor this release targets.
+nodeSelector: {}
+affinity: {}
+tolerations: []
