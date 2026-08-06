@@ -85,6 +85,14 @@ spec:
             - "--vendor_domain={{ .Values.vendorDomain }}"
           securityContext:
             privileged: true
+          # Container level: a pod-level resources block is pruned on a cluster
+          # where the PodLevelResources gate is off, leaving the plugin BestEffort.
+          resources:
+            limits:
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
           volumeMounts:
             - name: device-plugin
               mountPath: /var/lib/kubelet/device-plugins
@@ -109,9 +117,3 @@ spec:
           hostPath:
             path: /sys
             type: Directory
-      resources:
-        limits:
-          memory: 200Mi
-        requests:
-          cpu: 100m
-          memory: 200Mi
